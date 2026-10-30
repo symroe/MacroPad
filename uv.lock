@@ -1,0 +1,48 @@
+version = 1
+revision = 3
+requires-python = ">=3.11"
+
+[[package]]
+name = "evdev-binary"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/01/ca/4e6b01b284074cc2b7b80216283414c5edbf4b2c7ec79b0b4e8eec8ff00f/evdev_binary-2.0.0-cp311-cp311-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:1c3e4c14a855e630171b9154a3dd9e436b99c993ca74810fee37c44394ad77b7", size = 113396, upload-time = "2026-08-23T10:33:48.402Z" },
+    { url = "https://files.pythonhosted.org/packages/d1/0d/cdd5433944356663ca12aab9eea142c4f40a940f55f031b1de3b7ac30adb/evdev_binary-2.0.0-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:6e71d204a640414ab938ed51f58b890f0af794d6e2fc18e2d064a38751866028", size = 113563, upload-time = "2026-08-23T10:33:49.743Z" },
+    { url = "https://files.pythonhosted.org/packages/6e/82/858b89730d045bf4171e83f4402d208f4697b9a685e2dac06547dbf87536/evdev_binary-2.0.0-cp312-cp312-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:4721296f6439fd2a923f9e174c9a4dede44efee6aef3470775154d9cf7b54ba3", size = 113654, upload-time = "2026-08-23T10:33:50.801Z" },
+    { url = "https://files.pythonhosted.org/packages/c5/aa/43b0cbb33c33aecfd4c0a53d444883befd2af3e19c5e3f1c4ecdf1697322/evdev_binary-2.0.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:60af0031e883aa77f6f6cb437ce7034f9f982475d7de8d3c4edb786014cbfd10", size = 113668, upload-time = "2026-08-23T10:33:52.047Z" },
+    { url = "https://files.pythonhosted.org/packages/bd/76/2264e3660763985a47222c1411d6d402a6dd3a6d1895b6578aa1ef3207a0/evdev_binary-2.0.0-cp313-cp313-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:b64512740b333120eecb9863c3f6d7ee967ec9c90686e7da45441d0f89527a39", size = 113739, upload-time = "2026-08-23T10:33:53.166Z" },
+    { url = "https://files.pythonhosted.org/packages/a5/05/578f1f6db936cd7712ae09be9f3fefc5b1c1b54ef75cae1c1b0e5fe87bce/evdev_binary-2.0.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:5d949578ddf6939b6ca18164c43a21ec0f4a372bc9bf0e4ab7a64dba27c12fa2", size = 113823, upload-time = "2026-08-23T10:33:54.368Z" },
+    { url = "https://files.pythonhosted.org/packages/d0/0b/3d79b01fb41be9993adc991d35129ed78603f595054d0922fcff4ddd134c/evdev_binary-2.0.0-cp314-cp314-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:21a10b2d2f16f087693817f5d51c87b196ff2777d7d7ec9565b8763eeecaa3f8", size = 113853, upload-time = "2026-08-23T10:33:55.55Z" },
+    { url = "https://files.pythonhosted.org/packages/a8/8f/b4cba5a5d502f10e79ac82a86c3c500f3687c591d87d93aad59086ad0296/evdev_binary-2.0.0-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:31be49ff148d85deefa3a9dfdf00e9ec4a468f4b56fcc8c9f5a3a0f858e9e688", size = 113912, upload-time = "2026-08-23T10:33:56.852Z" },
+    { url = "https://files.pythonhosted.org/packages/cc/9b/2007963b8bccee0c000c4591a30e1b13077276aac0e5c1989a20cb69ac4b/evdev_binary-2.0.0-cp314-cp314t-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:aad751239457e6c4efe530c44e0df19a6e26dda0baf15660e288da2b8e6fd996", size = 118298, upload-time = "2026-08-23T10:33:57.941Z" },
+    { url = "https://files.pythonhosted.org/packages/f5/c3/9ab4b4f30b725f626691e6c21083c164bf42c17715a87dba9cbc6c51d727/evdev_binary-2.0.0-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:68e44d24bf1cde2d8a5e43d1d82fe98fe26c31f7f3d53c65b1e005f24111c1bb", size = 118420, upload-time = "2026-08-23T10:33:59.192Z" },
+    { url = "https://files.pythonhosted.org/packages/dc/8f/e310fa36fdc16a98f0641699d610c2ee9600534f92d705ba91d5b6777f61/evdev_binary-2.0.0-cp315-cp315-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:bd0562aad657ba79119746449fcfc44b8a183161a8b78e2ebbf7c98b7f7c79da", size = 114269, upload-time = "2026-08-23T10:34:00.453Z" },
+    { url = "https://files.pythonhosted.org/packages/a9/d8/df36f1c44d1c4dd579251cdca804ebc636321b062042fed05335bf346c91/evdev_binary-2.0.0-cp315-cp315-musllinux_1_2_x86_64.whl", hash = "sha256:9440e183aa831e4e418b3e77f928886d4d66a46258905882c0a25cc5fccd6d8f", size = 114303, upload-time = "2026-08-23T10:34:01.687Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/ee/9b0e2c57daded6d0730b697c24903ef1db6fe5e34eb60fade0aaf41713ea/evdev_binary-2.0.0-cp315-cp315t-manylinux1_x86_64.manylinux_2_34_x86_64.manylinux_2_5_x86_64.whl", hash = "sha256:9e40b9ce7628d788c9dfe96da0143e700d6010c4c86776ba39a5a76e2127d153", size = 118902, upload-time = "2026-08-23T10:34:02.78Z" },
+    { url = "https://files.pythonhosted.org/packages/36/d6/11aa8cd6114f2f612c469a340b625c77d539435c57d97aacd7d655ed3eff/evdev_binary-2.0.0-cp315-cp315t-musllinux_1_2_x86_64.whl", hash = "sha256:e9bfc072900e6360011ab0cd94517a7fe80d200594a2bacac5b8b8d4d3f7fd2c", size = 119014, upload-time = "2026-08-23T10:34:04.001Z" },
+]
+
+[[package]]
+name = "macropad"
+version = "0.1.0"
+source = { editable = "." }
+dependencies = [
+    { name = "evdev-binary" },
+    { name = "tomli-w" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "evdev-binary", specifier = ">=2.0.0" },
+    { name = "tomli-w", specifier = ">=1.2.0" },
+]
+
+[[package]]
+name = "tomli-w"
+version = "1.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/19/75/241269d1da26b624c0d5e110e8149093c759b7a286138f4efd61a60e75fe/tomli_w-1.2.0.tar.gz", hash = "sha256:2dd14fac5a47c27be9cd4c976af5a12d87fb1f0b4512f81d69cce3b35ae25021", size = 7184, upload-time = "2025-01-15T12:07:24.262Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c7/18/c86eb8e0202e32dd3df50d43d7ff9854f8e0603945ff398974c1d91ac1ef/tomli_w-1.2.0-py3-none-any.whl", hash = "sha256:188306098d013b691fcadc011abd66727d3c414c571bb01b1a174ba8c983cf90", size = 6675, upload-time = "2025-01-15T12:07:22.074Z" },
+]

@@ -1,0 +1,6 @@
+# DOIO KB16 / Megalodon macro pad: let the logged-in desktop user read its
+# input devices and VIA interface, and create the passthrough virtual keyboard.
+# (Must sort before 73-seat-late.rules for uaccess to apply.)
+SUBSYSTEM=="input", ATTRS{idVendor}=="d010", ATTRS{idProduct}=="1601", TAG+="uaccess"
+SUBSYSTEM=="hidraw", ATTRS{idVendor}=="d010", ATTRS{idProduct}=="1601", TAG+="uaccess"
+KERNEL=="uinput", SUBSYSTEM=="misc", TAG+="uaccess", OPTIONS+="static_node=uinput"

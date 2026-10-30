@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Macropad
+Comment=Set up shortcuts for the macro pad
+Exec=@DIR@/.venv/bin/macropad gui
+Path=@DIR@
+Icon=input-keyboard
+Terminal=false
+Categories=Settings;HardwareSettings;
+StartupNotify=true

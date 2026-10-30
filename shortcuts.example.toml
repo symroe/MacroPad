@@ -1,0 +1,34 @@
+# Shortcuts for the macro pad. Edited by `make gui`; hand edits are fine too.
+# The app writes shortcuts.toml (not committed); this file is just an example.
+
+[settings]
+# browser = "firefox"            # command for Open URL; default is xdg-open
+# firefox_profile = "default"    # whose containers to offer
+
+[[shortcut]]
+layer = 0
+key = "k1"
+label = "Memo"
+type = "hold"
+command = "pw-record ~/Memos/$(date +%F_%H-%M-%S).wav"
+
+[[shortcut]]
+layer = 0
+key = "k2"
+label = "Note"
+type = "quicknote"
+
+[[shortcut]]
+layer = 0
+key = "k4"
+label = "Lock"
+type = "command"
+command = "gdbus call --session --dest org.gnome.ScreenSaver --object-path /org/gnome/ScreenSaver --method org.gnome.ScreenSaver.Lock"
+
+[[shortcut]]
+layer = 0
+key = "k5"
+label = "Calendar"
+type = "url"
+url = "https://calendar.google.com/"
+container = "Work"
