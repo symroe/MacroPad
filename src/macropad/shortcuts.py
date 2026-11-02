@@ -84,9 +84,17 @@ def _stop_held(shortcut, settings):
             pass
 
 
-def _quick_note(shortcut, settings):
+def _note_window(*args):
     # Our own `macropad` script, next to the Python that's running this.
-    _spawn([os.path.join(os.path.dirname(sys.executable), "macropad"), "note"])
+    _spawn([os.path.join(os.path.dirname(sys.executable), "macropad"), "note", *args])
+
+
+def _quick_note(shortcut, settings):
+    _note_window()
+
+
+def _quick_ticket(shortcut, settings):
+    _note_window("--ticket")
 
 
 ACTION_TYPES = {
@@ -121,6 +129,12 @@ ACTION_TYPES = {
         [],
         _quick_note,
         hint="Opens a small window; Ctrl+Enter adds the text to today's daily note",
+    ),
+    "quickticket": ActionType(
+        "Quick note to Ticketr",
+        [],
+        _quick_ticket,
+        hint="Opens a small window; Ctrl+Enter prints a TODO ticket, with the first line as its title",
     ),
 }
 

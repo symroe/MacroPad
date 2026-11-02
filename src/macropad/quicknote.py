@@ -1,29 +1,79 @@
-"""A small window for jotting a note into today's Obsidian daily note.
+"""A small window for jotting a note, then sending it somewhere.
 
-Ctrl+Enter adds it (with the Obsidian CLI's daily:append), Ctrl+K turns the
-line into a task (or back), Enter continues a list, and Esc closes. Unsent
-text is kept as a draft for next time.
+The note goes to today's Obsidian daily note (with the Obsidian CLI's
+daily:append), or with --ticket is printed straight away as a Ticketr TODO
+ticket, the first line being the title.
+
+Ctrl+Enter sends it, Ctrl+K turns the line into a task (or back), Enter
+continues a list, and Esc closes. Unsent text is kept as a draft for next time.
+Spelling is checked against Obsidian's dictionary (see spelling.py).
 """
 
 import re
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
 
 from .gtk import Adw, Gdk, Gio, GLib, Gtk
+from .spelling import SpellCheck
 
 APP_ID = "uk.co.symroe.Macropad.Note"
-DRAFT = Path(GLib.get_user_cache_dir()) / "macropad" / "note-draft.md"
+CACHE = Path(GLib.get_user_cache_dir()) / "macropad"
+# Its own venv's script, as the daemon's PATH may not include uv.
+TICKETR = Path.home() / "Projects" / "Ticketr" / ".venv" / "bin" / "ticketr"
 # indent, bullet, optional checkbox
 LIST_ITEM = re.compile(r"^(\s*)([-*+] )(\[[ xX]\] )?")
 
 
+def run_sender(argv, input=None):
+    """Run a command, returning what went wrong, or None if it worked."""
+    try:
+        result = subprocess.run(argv, input=input, capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError) as e:
+        return str(e)
+    output = (result.stdout + result.stderr).strip()
+    if result.returncode != 0 or output.startswith("Error"):
+        return output.splitlines()[-1] if output else "unknown error"
+    return None
+
+
+def add_to_daily_note(text):
+    # daily:append adds one newline; the extra one leaves a blank line before the note.
+    return run_sender(["obsidian", "daily:append", f"content=\n{text}"])
+
+
+def print_ticket(text):
+    title, _, description = text.partition("\n")
+    # --force: a key press always means "print this", even if the title was used recently.
+    return run_sender([str(TICKETR), "print", "-t", "todo", "--force", f"--title={LIST_ITEM.sub('', title).strip()}"],
+                      input=description.strip())
+
+
+@dataclass(frozen=True)
+class Target:
+    title: str
+    subtitle: str
+    verb: str  # on the button and in the hints
+    failure: str  # shown before the error
+    send: callable  # text -> error message, or None if it worked
+    draft: Path
+    shows_daily_note: bool = False
+
+
+DAILY_NOTE = Target("Quick note", "Daily note", "Add", "Couldn't add note", add_to_daily_note,
+                    CACHE / "note-draft.md", shows_daily_note=True)
+TICKET = Target("Quick ticket", "Prints straight away. First line is the title", "Print", "Couldn't print ticket",
+                print_ticket, CACHE / "ticket-draft.md")
+
+
 class NoteWindow(Adw.ApplicationWindow):
-    def __init__(self, app):
-        super().__init__(application=app, title="Quick note", default_width=560, default_height=320)
+    def __init__(self, app, target):
+        super().__init__(application=app, title=target.title, default_width=560, default_height=320)
+        self.target = target
         self.sent = False
 
-        self.title = Adw.WindowTitle(title="Quick note", subtitle="Daily note")
-        add = Gtk.Button(label="Add", css_classes=["suggested-action"], tooltip_text="Ctrl+Enter")
+        self.title = Adw.WindowTitle(title=target.title, subtitle=target.subtitle)
+        add = Gtk.Button(label=target.verb, css_classes=["suggested-action"], tooltip_text="Ctrl+Enter")
         add.connect("clicked", lambda *_: self.send())
         header = Adw.HeaderBar(title_widget=self.title)
         header.pack_end(add)
@@ -31,11 +81,12 @@ class NoteWindow(Adw.ApplicationWindow):
         self.view = Gtk.TextView(wrap_mode=Gtk.WrapMode.WORD_CHAR, top_margin=12, bottom_margin=12,
                                  left_margin=12, right_margin=12)
         self.buffer = self.view.get_buffer()
+        self.spelling = SpellCheck(self.view, self.show_error)
         keys = Gtk.EventControllerKey(propagation_phase=Gtk.PropagationPhase.CAPTURE)
         keys.connect("key-pressed", self.on_key)
         self.view.add_controller(keys)
 
-        hints = Gtk.Label(label="Ctrl+Enter add  ·  Ctrl+K task  ·  Esc close",
+        hints = Gtk.Label(label=f"Ctrl+Enter {target.verb.lower()}  ·  Ctrl+K task  ·  Esc close",
                           css_classes=["caption", "dim-label"], margin_top=6, margin_bottom=6)
         view = Adw.ToolbarView(content=Gtk.ScrolledWindow(child=self.view, vexpand=True))
         view.add_top_bar(header)
@@ -45,7 +96,8 @@ class NoteWindow(Adw.ApplicationWindow):
 
         self.load_draft()
         self.connect("close-request", lambda *_: self.save_draft())
-        self.show_note_name()
+        if target.shows_daily_note:
+            self.show_note_name()
 
     # Keys
 
@@ -115,33 +167,29 @@ class NoteWindow(Adw.ApplicationWindow):
         if not text:
             self.close()
             return
-        try:
-            # daily:append adds one newline; the extra one leaves a blank line before the note.
-            result = subprocess.run(["obsidian", "daily:append", f"content=\n{text}"],
-                                    capture_output=True, text=True, timeout=15)
-            output = (result.stdout + result.stderr).strip()
-            failed = result.returncode != 0 or output.startswith("Error")
-        except (OSError, subprocess.SubprocessError) as e:
-            failed, output = True, str(e)
-        if failed:
-            self.toasts.add_toast(Adw.Toast(title=f"Couldn't add note: {output or 'unknown error'}", timeout=0))
+        error = self.target.send(text)
+        if error:
+            self.show_error(f"{self.target.failure}: {error}")
             return
         self.sent = True
         self.close()
 
+    def show_error(self, message):
+        self.toasts.add_toast(Adw.Toast(title=GLib.markup_escape_text(message), timeout=0))
+
     def load_draft(self):
         try:
-            self.buffer.set_text(DRAFT.read_text())
+            self.buffer.set_text(self.target.draft.read_text())
         except FileNotFoundError:
             return
         self.buffer.place_cursor(self.buffer.get_end_iter())
 
     def save_draft(self):
         if self.sent or not self.text():
-            DRAFT.unlink(missing_ok=True)
+            self.target.draft.unlink(missing_ok=True)
         else:
-            DRAFT.parent.mkdir(parents=True, exist_ok=True)
-            DRAFT.write_text(self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter(), False))
+            self.target.draft.parent.mkdir(parents=True, exist_ok=True)
+            self.target.draft.write_text(self.buffer.get_text(self.buffer.get_start_iter(), self.buffer.get_end_iter(), False))
         return False
 
     def show_note_name(self):
@@ -161,16 +209,17 @@ class NoteWindow(Adw.ApplicationWindow):
 
 
 class NoteApp(Adw.Application):
-    def __init__(self):
+    def __init__(self, target):
+        self.target = target
         # Not single-instance: GNOME only gives focus to a new process's window,
         # not to an existing one raised from the background.
         super().__init__(application_id=APP_ID, flags=Gio.ApplicationFlags.NON_UNIQUE)
 
     def do_activate(self):
-        window = NoteWindow(self)
+        window = NoteWindow(self, self.target)
         window.present()
         window.view.grab_focus()
 
 
-def run():
-    NoteApp().run([])
+def run(ticket=False):
+    NoteApp(TICKET if ticket else DAILY_NOTE).run([])

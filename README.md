@@ -46,6 +46,17 @@ Pressing knob2 steps through layers 0–3 (shown on the pad's screen).
 - **Quick note to Obsidian**: a small window (also `make note`). Ctrl+Enter
   adds the text to today's daily note via the `obsidian` CLI, Ctrl+K toggles a
   task, Enter continues a list, Esc closes and keeps a draft.
+- **Quick note to Ticketr**: the same window (also `macropad note --ticket`), but
+  Ctrl+Enter prints a TODO ticket right away with
+  [Ticketr](../../Ticketr), which is expected in `~/Projects/Ticketr`. The first
+  line is the title and the rest the description. It prints even if that title
+  was printed recently.
+
+Both note windows check spelling against Obsidian's dictionary: its languages and
+the words you've added there (`~/.config/obsidian`), read each time a window
+opens. Right-click an underlined word for suggestions, or to add it to Obsidian's
+dictionary (Obsidian itself picks up new words when it restarts). The language itself comes from the matching system Hunspell dictionary
+(`hunspell-en-gb`), as Obsidian's own files are in a format only it can read.
 
 ## Files
 

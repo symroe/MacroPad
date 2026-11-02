@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "evdev-binary>=2.0.0",
+    "pyenchant>=3.3.0",
     "tomli-w>=1.2.0",
 ]
 

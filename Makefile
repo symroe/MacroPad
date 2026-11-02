@@ -28,7 +28,7 @@ DESKTOP := $(USER_HOME)/.local/share/applications/uk.co.symroe.Macropad.desktop
 # The GUI uses Ubuntu's GTK bindings, so the venv is built on the system
 # Python with access to its packages (PyGObject from PyPI needs compiling).
 SYSTEM_PYTHON := /usr/bin/python3
-APT_PACKAGES := python3-gi gir1.2-gtk-4.0 gir1.2-adw-1
+APT_PACKAGES := python3-gi gir1.2-gtk-4.0 gir1.2-adw-1 libenchant-2-2 hunspell-en-gb
 
 .PHONY: install uninstall push pull logs gui note check-user venv
 

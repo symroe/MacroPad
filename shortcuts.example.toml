@@ -20,6 +20,12 @@ type = "quicknote"
 
 [[shortcut]]
 layer = 0
+key = "k3"
+label = "Ticket"
+type = "quickticket"
+
+[[shortcut]]
+layer = 0
 key = "k4"
 label = "Lock"
 type = "command"

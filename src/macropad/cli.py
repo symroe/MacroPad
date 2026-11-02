@@ -31,7 +31,7 @@ def cmd_gui(args):
 def cmd_note(args):
     from . import quicknote
 
-    quicknote.run()
+    quicknote.run(ticket=args.ticket)
 
 
 def cmd_push(args):
@@ -64,7 +64,9 @@ def main():
     push.set_defaults(func=cmd_push)
     sub.add_parser("pull", help="print the pad's current keymap as Python").set_defaults(func=cmd_pull)
     sub.add_parser("gui", help="set up shortcuts in a window").set_defaults(func=cmd_gui)
-    sub.add_parser("note", help="jot a note into today's Obsidian daily note").set_defaults(func=cmd_note)
+    note = sub.add_parser("note", help="jot a note into today's Obsidian daily note")
+    note.add_argument("--ticket", action="store_true", help="print it as a Ticketr TODO ticket instead")
+    note.set_defaults(func=cmd_note)
     args = parser.parse_args()
 
     # Under systemd the journal adds timestamps itself.
